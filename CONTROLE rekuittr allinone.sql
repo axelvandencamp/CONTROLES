@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(uittreksel TEXT);
 
-INSERT INTO _AV_myvar VALUES('21-221-206');	--uittreksel
+INSERT INTO _AV_myvar VALUES('21-221-220');	--uittreksel
 				
 SELECT * FROM _AV_myvar;
 
@@ -18,6 +18,7 @@ SELECT * FROM _AV_myvar;
 DROP TABLE IF EXISTS tempControleQRYs;
 
 CREATE TEMP TABLE tempControleQRYs (
+	Uittreksel text,
 	Type_Controle text,
 	RekNr text,
 	Rek text,
@@ -30,7 +31,7 @@ CREATE TEMP TABLE tempControleQRYs (
 
 --=====controle 0======--
 INSERT INTO tempControleQRYs
-	(SELECT '499010 Wachtrekening coda', s.name, a.name, a.code, al.ref, al.amount, al.voucher_id, v.partner_id, 
+	(SELECT var.uittreksel, '499010 Wachtrekening coda', s.name, a.name, a.code, al.ref, al.amount, al.voucher_id, v.partner_id, 
 		'controle op lijnen met rekening [499010 Wachtrekening coda] moet vermoedelijk aangepast worden naar [000000 Te ontvangen facturen lidgelden]'
 	FROM   _AV_myvar var, account_bank_statement s
 		INNER JOIN account_bank_statement_line al ON s.id = al.statement_id
@@ -41,7 +42,7 @@ INSERT INTO tempControleQRYs
 		AND a.code = '499010');
 --=====controle 1=====--
 INSERT INTO tempControleQRYs
-	(select 'controle qry1', '', a1.name, '', a2.ref, a2.amount, '', a2.partner_id, a2.note
+	(select var.uittreksel, 'controle qry1', '', a1.name, '', a2.ref, a2.amount, '', a2.partner_id, a2.note
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2
 	join account_account a3 on (a2.account_id = a3.id)
 	where a1.name = var.uittreksel
@@ -50,7 +51,7 @@ INSERT INTO tempControleQRYs
 	  and a3.partner_mandatory = True);		
 --=====controle 2=====--
 INSERT INTO tempControleQRYs
-	(select 'controle qry2', '', a1.name, '', a2.ref, a2.amount, '', a2.partner_id, 'dimensie(s) niet ingevuld'
+	(select var.uittreksel, 'controle qry2', '', a1.name, '', a2.ref, a2.amount, '', a2.partner_id, 'dimensie(s) niet ingevuld'
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2
 	where a1.name = var.uittreksel
 	  and a1.id = a2.statement_id
@@ -60,8 +61,8 @@ INSERT INTO tempControleQRYs
 --=====controle qry3=====--
 --meer dan 1 factuur
 INSERT INTO tempControleQRYs
-	(select 'controle qry3', '', '', '', '', NULL, '', partner_id, 'aantal: ' || nbr
-	from (select max(a2.partner_id) as partner_id, count(v2.move_line_id) as nbr
+	(select var.uittreksel, 'controle qry3', '', '', '', '', NULL, '', partner_id, 'aantal: ' || nbr
+	from _AV_myvar var, (select max(a2.partner_id) as partner_id, count(v2.move_line_id) as nbr
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2, account_voucher v1, account_voucher_line v2
 	where a1.name = var.uittreksel
 	  and a1.id = a2.statement_id
@@ -72,8 +73,8 @@ INSERT INTO tempControleQRYs
 	where nbr > 1);  	
 
 INSERT INTO tempControleQRYs
-	(SELECT 'controle qry3b', '', '', '', '', NULL, '', SQ1.partner_id, 'ID +1: ' || SQ1.r
-	FROM
+	(SELECT var.uittreksel, 'controle qry3b', '', '', '', '', NULL, '', SQ1.partner_id, 'ID +1: ' || SQ1.r
+	FROM _AV_myvar var, 
 		(SELECT al.partner_id, al.amount, ROW_NUMBER() OVER (PARTITION BY al.partner_id, al.amount ORDER BY al.partner_id DESC) as r
 		FROM   _AV_myvar var, account_bank_statement s
 			JOIN account_bank_statement_line al ON s.id = al.statement_id
@@ -84,7 +85,7 @@ INSERT INTO tempControleQRYs
 --=====controle qry4=====--
 --reeds betaald; er staat toch nog een voucher
 INSERT INTO tempControleQRYs
-	(select 'controle qry4', a1.name, a2.note, '', a2.ref, a2.amount, '', a2.partner_id, 'reeds afgepunt'
+	(select var.uittreksel, 'controle qry4', a1.name, a2.note, '', a2.ref, a2.amount, '', a2.partner_id, 'reeds afgepunt'
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2, account_voucher v1, account_voucher_line v2, account_move_line m1
 	where a1.name = var.uittreksel
 	  and a1.id = a2.statement_id
@@ -94,7 +95,7 @@ INSERT INTO tempControleQRYs
 	  and not(m1.reconcile_id IS NULL));
 --=====controle qry5=====--
 INSERT INTO tempControleQRYs
-	(select 'controle qry5', a1.name, '', '', a2.ref, a2.amount, '', a2.partner_id, 'factuur heeft status: "betaald", "geannuleerd", "draft"'
+	(select var.uittreksel, 'controle qry5', a1.name, '', '', a2.ref, a2.amount, '', a2.partner_id, 'factuur heeft status: "betaald", "geannuleerd", "draft"'
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2, account_voucher v1, account_voucher_line v2, account_move_line m1, 
 	account_move_line m2, account_invoice_line i1, account_invoice i2
 	where a1.name = var.uittreksel
@@ -109,7 +110,7 @@ INSERT INTO tempControleQRYs
 	  and i2.state in ('paid','canceled','draft')); 	  
 --=====controle qry6=====--
 INSERT INTO tempControleQRYs
-	(select 'controle qry6', a1.name, '', '', a2.ref, a2.amount, v2.move_line_ref_id, a2.partner_id, a2.note
+	(select var.uittreksel, 'controle qry6', a1.name, '', '', a2.ref, a2.amount, v2.move_line_ref_id, a2.partner_id, a2.note
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2, account_voucher v1, account_voucher_line v2
 	where a1.name = var.uittreksel
 	  and a1.id = a2.statement_id
@@ -119,7 +120,7 @@ INSERT INTO tempControleQRYs
 --=====controle qry7=====--
 --verschillen in bedragen detecteren
 INSERT INTO tempControleQRYs
-	(select 'controle qry7', a1.name, a2.note, '', a2.ref, a2.amount, '', a2.partner_id, 'verschillen in bedragen detecteren'
+	(select var.uittreksel, 'controle qry7', a1.name, a2.note, '', a2.ref, a2.amount, '', a2.partner_id, 'verschillen in bedragen detecteren'
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2, account_voucher v1
 	where a1.name = var.uittreksel
 	  and a1.id = a2.statement_id
@@ -129,7 +130,7 @@ INSERT INTO tempControleQRYs
 --opsporen van "write off" fout
 --WIP
 INSERT INTO tempControleQRYs
-	(SELECT 'controle qry8', '', '', '', '', NULL, '', bsl.partner_id, 'Write-off: ipv write-off "open houden" gebruikten'
+	(SELECT var.uittreksel, 'controle qry8', '', '', '', '', NULL, '', bsl.partner_id, 'Write-off: ipv write-off "open houden" gebruikten'
 	FROM _AV_myvar var, account_bank_statement bs 
 		JOIN account_bank_statement_line bsl ON bs.id = bsl.statement_id
 		LEFT OUTER JOIN account_voucher av ON bsl.id = av.statement_line_id
@@ -138,10 +139,11 @@ INSERT INTO tempControleQRYs
 --=====controle qry9=====--
 --som vd lijnen uit bankstatement (moet 0 zijn)
 INSERT INTO tempControleQRYs
-	(select 'controle qry9', '', '', '', '', sum(a2.amount), '', NULL, 'loop query [controle qry rekuittr verschil transactie vs CODA] om plaats van de verschillen op te sporen'
+	(select var.uittreksel, 'controle qry9', '', '', '', '', sum(a2.amount), '', NULL, 'loop query [controle qry rekuittr verschil transactie vs CODA] om plaats van de verschillen op te sporen'
 	from _AV_myvar var, account_bank_statement a1, account_bank_statement_line a2
 	where a1.name = var.uittreksel
-	  and a1.id = a2.statement_id);
+	  and a1.id = a2.statement_id
+	GROUP BY var.uittreksel);
 --=====resultaat controle=====--
 SELECT * FROM tempControleQRYs ORDER BY partnerid;
 --DELETE FROM tempControleQRYs;
