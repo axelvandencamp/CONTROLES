@@ -15,8 +15,8 @@
 --SET VARIABLES
 DROP TABLE IF EXISTS myvar;
 SELECT 
-	'2019-01-01'::date AS startdatum,
-	'2019-12-31'::date AS einddatum,
+	'2020-12-20'::date AS startdatum,
+	'2021-09-30'::date AS einddatum,
 	'fundraising'::text AS koalect_platform, -- expeditie - donation - fundraising
 	'dummy'::text AS vervang_str1,
 	'dummy'::text AS vervang_str2,
@@ -51,9 +51,9 @@ UPDATE myvar
 --=========================================================--
 --CREATE TEMP TABLE
 --/*
-DROP TABLE IF EXISTS _AV_temp_algemeen;
+DROP TABLE IF EXISTS marketing._AV_temp_algemeen;
 
-CREATE TABLE _AV_temp_algemeen 
+CREATE TABLE marketing._AV_temp_algemeen 
 (Transaction_ID TEXT,
  Firstname TEXT,
  Lastname TEXT,
@@ -75,15 +75,15 @@ CREATE TABLE _AV_temp_algemeen
  Actie_Code TEXT -- in comment voor donations
 );
 
-SELECT * FROM _AV_temp_algemeen WHERE transaction_id = '66812'
+SELECT * FROM marketing._AV_temp_algemeen WHERE transaction_id = '66812'
 --===========================================================
 -- koalect data manueel importeren
 --===========================================================
 -- temp tabel voor Giften data aanmaken
 ---------------------------------------
-DROP TABLE IF EXISTS _AV_temp_GIFTEN;
+DROP TABLE IF EXISTS marketing._AV_temp_GIFTEN;
 
-CREATE TEMP TABLE _AV_temp_GIFTEN (
+CREATE TABLE marketing._AV_temp_GIFTEN (
 	T_ERP TEXT,
 	N_ERP TEXT,
 	ID_ERP NUMERIC,
@@ -92,12 +92,12 @@ CREATE TEMP TABLE _AV_temp_GIFTEN (
 	B_ERP NUMERIC,
 	Boeking_ERP TEXT);
 
-SELECT * FROM _AV_temp_GIFTEN;	
+SELECT * FROM marketing._AV_temp_GIFTEN;	
 --/*
 --------------------------------------------------
 -- Giften data ophalen
 ----------------------
-INSERT INTO _AV_temp_GIFTEN
+INSERT INTO marketing._AV_temp_GIFTEN
 	(SELECT REPLACE(REPLACE(REPLACE(aml.name,';',','),chr(10),' '),chr(13), ' ') AS T_ERP,
 		p.name as N_ERP,
 		p.id ID_ERP,
@@ -133,10 +133,10 @@ INSERT INTO _AV_temp_GIFTEN
 -----------------------------------------------------------
 -- T_ERP uit "description" halen
 --------------------------------
-UPDATE _AV_temp_GIFTEN g
+UPDATE marketing._AV_temp_GIFTEN g
 SET T_ERP = REPLACE(REPLACE(REPLACE(LOWER(g.T_ERP),' ',''),v.vervang_str1,''),'koalect','')
 FROM myvar v;
-UPDATE _AV_temp_GIFTEN g
+UPDATE marketing._AV_temp_GIFTEN g
 SET T_ERP = REPLACE(REPLACE(REPLACE(LOWER(g.T_ERP),' ',''),v.vervang_str2,''),'koalect','')
 FROM myvar v;
 --=========================================================
@@ -146,7 +146,7 @@ FROM myvar v;
 SELECT date::date, check_t + check_n + check_k + check_p + check_b AS check_sum, check_t, check_n, check_k, check_p, check_b,
 	id_erp, boeking_erp, opmerking, rechtzetting,
 	transaction_id, t_erp, naam, n_erp, kostenplaats, k_erp, projectnaam, p_erp, bedrag, b_erp,
-	actie_id, actie_code, id_erp, street, nr, bus, pc, gemeente, email -- [actie_id] en [actie_code] in comment zetten voor donations
+	/*actie_id, actie_code,*/ id_erp, street, nr, bus, pc, gemeente, email -- [actie_id] en [actie_code] in comment zetten voor donations
 FROM	(SELECT date::date, check_sum,
 		CASE WHEN transaction_id = t_erp THEN 0 ELSE 1 END AS check_t,
 		CASE WHEN LOWER(firstname)||' '||LOWER(lastname) = LOWER(n_erp) THEN 0 ELSE 1 END AS check_n,
@@ -155,13 +155,13 @@ FROM	(SELECT date::date, check_sum,
 		CASE WHEN bedrag = b_erp THEN 0 ELSE 1 END as check_b,
 		transaction_id, t_erp, firstname||' '||lastname naam, n_erp, kostenplaats, k_erp, projectnaam, p_erp, bedrag, b_erp, 
 		boeking_erp, opmerking, rechtzetting,
-		actie_id, actie_code, id_erp, street, nr, bus, pc, gemeente, email -- [actie_id] en [actie_code] in comment zetten voor donations
+		/*actie_id, actie_code,*/ id_erp, street, nr, bus, pc, gemeente, email -- [actie_id] en [actie_code] in comment zetten voor donations
 	FROM	(
 		SELECT null check_sum, null check_t, null check_n, null check_k, null check_p, null check_b, null opmerking, null rechtzetting,
 			a.transaction_id, g.t_erp, a.firstname, a.lastname, g.n_erp,  a.kostenplaats, g.k_erp, a.projectnaam, g.p_erp, REPLACE(a.bedrag,',','.')::numeric bedrag, g.b_erp, g.boeking_erp,
-			g.id_erp, a.street, a.nr, a.bus, a.pc, a.gemeente, a.email, a.date::date, a.actie_id, a.actie_code -- [actie_id] en [actie_code] in comment zetten voor donations
-		FROM myvar v, _AV_temp_GIFTEN g
-			LEFT OUTER JOIN _AV_temp_algemeen a ON a.transaction_id = g.T_ERP
+			g.id_erp, a.street, a.nr, a.bus, a.pc, a.gemeente, a.email, a.date::date--, a.actie_id, a.actie_code -- [actie_id] en [actie_code] in comment zetten voor donations
+		FROM myvar v, marketing._AV_temp_GIFTEN g
+			LEFT OUTER JOIN marketing._AV_temp_algemeen a ON a.transaction_id = g.T_ERP
 		WHERE NOT(g.t_erp LIKE 'p%')
 		) SQ1
 	) SQ2
