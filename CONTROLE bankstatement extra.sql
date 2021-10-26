@@ -27,9 +27,10 @@ SELECT * FROM account_invoice WHERE reference = '+++297/3300/00536+++'
 -- Bank Statement Line: betaling op basis van naam of mededeling
 -----------------------------------------------------------
 DROP TABLE IF EXISTS _AV_myvar;
-CREATE TEMP TABLE _AV_myvar (zoekterm TEXT);
+CREATE TEMP TABLE _AV_myvar (zoekterm TEXT, start_datum DATE);
 
-INSERT INTO _AV_myvar VALUES ('%singh%'); --*/('R:6-%');
+INSERT INTO _AV_myvar VALUES ('%buckaroo%',
+							  '2021-10-01'); --*/('R:6-%');
 --INSERT INTO _AV_myvar VALUES ('R:2-82251007/012%');
 SELECT * FROM _AV_myvar;
 -----------------------------------------------------------
@@ -38,7 +39,7 @@ SELECT abs.name, replace(absl.name, chr(10), ' ') Mededeling, absl.create_date, 
 --SELECT abs.name, replace(absl.name, chr(10), ' ') Mededeling, absl.*
 FROM _AV_myvar v, account_bank_statement abs LEFT OUTER JOIN account_bank_statement_line absl ON abs.id = absl.statement_id 
 	LEFT OUTER JOIN res_partner p ON p.id = absl.partner_id
-WHERE /*abs.name LIKE '20-288-%' AND*/ (LOWER(absl.name) LIKE LOWER(v.zoekterm) OR LOWER(p.name) LIKE LOWER(v.zoekterm))
+WHERE (LOWER(absl.name) LIKE LOWER(v.zoekterm) OR LOWER(p.name) LIKE LOWER(v.zoekterm)) AND absl.create_date::date >= v.start_datum /*AND abs.name LIKE '20-288-%'*/
 	 -- AND NOT(LOWER(absl.name) LIKE '%koalect%') AND abs.name LIKE '21-%'  -- voor "MANGOPAY" zonder toewijzing; met  v.zoekterm = '%mangopay%'
 --WHERE (LOWER(absl.name) LIKE '%expeditie%' OR LOWER(absl.name) LIKE '%exp.%' OR (LOWER(absl.name) LIKE '%exp%' AND NOT(LOWER(absl.name) LIKE '%koalect%'))) AND abs.name LIKE '%288%'
 --AND absl.amount = 30 AND absl.date BETWEEN '2020-12-21' AND '2020-12-23' --
