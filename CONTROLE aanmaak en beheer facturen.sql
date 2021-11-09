@@ -2,7 +2,7 @@
 -- facturen aangemaakt per dag (TEST bij hernieuwingsfacturen klaarzetten)
 --------------------------------------------------------------------
 --SELECT pp.name_template, * 
-SELECT i.partner_id, i.reference ogm, i.amount_total bedrag, i.state, i.create_date, i.membership_renewal--, i.*
+SELECT i.partner_id, i.reference ogm, i.amount_total bedrag, i.state, i.create_date, i.internal_number, i.membership_renewal--, i.*
 --SELECT COUNT(DISTINCT p.id) aantal, MAX(i.create_date) date
 
 FROM	account_invoice i
