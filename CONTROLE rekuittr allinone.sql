@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(uittreksel TEXT);
 
-INSERT INTO _AV_myvar VALUES('21-221-307');	--uittreksel
+INSERT INTO _AV_myvar VALUES('22-221-025');	--uittreksel
 				
 SELECT * FROM _AV_myvar;
 
