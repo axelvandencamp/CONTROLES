@@ -15,8 +15,8 @@
 --SET VARIABLES
 DROP TABLE IF EXISTS myvar;
 SELECT 
-	'2020-12-20'::date AS startdatum,
-	'2021-09-30'::date AS einddatum,
+	'2021-12-29'::date AS startdatum,
+	'2022-12-31'::date AS einddatum,
 	'fundraising'::text AS koalect_platform, -- expeditie - donation - fundraising
 	'dummy'::text AS vervang_str1,
 	'dummy'::text AS vervang_str2,
