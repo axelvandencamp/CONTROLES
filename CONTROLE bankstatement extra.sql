@@ -1,29 +1,4 @@
 ﻿-----------------------------------------------------------
--- Bank Statement: lijnen tellen
------------------------------------------------------------
-/*SELECT COUNT(DISTINCT(bsl.id))
-FROM account_bank_statement bs
-	JOIN account_bank_statement_line bsl ON bs.id = bsl.statement_id 
-WHERE bs.name = '15-221-283'*/
-
------------------------------------------------------------
--- Bank Statement: lege lijnen zoeken (of "onbekend")
------------------------------------------------------------
-/*
-SELECT bsl.*
---SELECT bs.*
-FROM account_bank_statement bs
-	JOIN account_bank_statement_line bsl ON bs.id = bsl.statement_id 
-WHERE bs.name = '16-221-070'	
-	--AND bsl.name = 'onbekend'
-	AND COALESCE(bsl.name,'&|#') = '&|#'
-
-SELECT * FROM account_bank_statement bs WHERE journal_id = 188 bs.name = '15-029-188'	
-SELECT * FROM account_bank_statement_line bsl WHERE account_id = 4114 LIMIT 100
-SELECT * FROM account_invoice WHERE reference = '+++297/3300/00536+++'
-*/
-
------------------------------------------------------------
 -- Bank Statement Line: betaling op basis van naam of mededeling
 -----------------------------------------------------------
 DROP TABLE IF EXISTS _AV_myvar;
