@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar (zoekterm TEXT, start_datum DATE);
 
-INSERT INTO _AV_myvar VALUES ('%mckinsey%',
+INSERT INTO _AV_myvar VALUES ('%danone%',
 							  '2021-10-01'); --*/('R:6-%');
 --INSERT INTO _AV_myvar VALUES ('R:2-82251007/012%');
 SELECT * FROM _AV_myvar;
@@ -19,6 +19,7 @@ WHERE (LOWER(absl.name) LIKE LOWER(v.zoekterm) OR LOWER(p.name) LIKE LOWER(v.zoe
 	 -- AND NOT(LOWER(absl.name) LIKE '%koalect%') AND abs.name LIKE '21-%'  -- voor "MANGOPAY" zonder toewijzing; met  v.zoekterm = '%mangopay%'
 --WHERE (LOWER(absl.name) LIKE '%expeditie%' OR LOWER(absl.name) LIKE '%exp.%' OR (LOWER(absl.name) LIKE '%exp%' AND NOT(LOWER(absl.name) LIKE '%koalect%'))) AND abs.name LIKE '%288%'
 --AND absl.amount = 30 AND absl.date BETWEEN '2020-12-21' AND '2020-12-23' --
+--WHERE absl.amount = 340
 ORDER BY abs.create_date DESC
 
 
