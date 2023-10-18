@@ -16,6 +16,7 @@ SELECT * FROM
 			WHEN LOWER(g.description) LIKE '%opbrengst%' THEN 'kw opbrengst'
 			WHEN LOWER(g.description) LIKE '%inzameling%' THEN 'kw inzameling'
 	 		WHEN LOWER(g.description) LIKE '%wildbeheer%' THEN 'kw wildbeheer'
+	 		WHEN LOWER(g.description) LIKE '%faunabeheer%' THEN 'kw faunabeheer'
 	 		WHEN LOWER(g.description) LIKE '%overeenkomst%' THEN 'kw overeenkomst'
 	 		WHEN LOWER(g.description) LIKE '%subsidie%' THEN 'kw subsidie'
 			WHEN g.bedrag IN (27,30,38) THEN 'Lidgeld?'
@@ -48,6 +49,7 @@ SELECT * FROM
 				OR LOWER(description) LIKE '%opbrengst%'
 				OR LOWER(description) LIKE '%inzameling%'
 				OR LOWER(g.description) LIKE '%wildbeheer%'
+			 	OR LOWER(g.description) LIKE '%faunabeheer%'
 			 	OR LOWER(g.description) LIKE '%overeenkomst%'
 				OR LOWER(g.description) LIKE '%subsidie%')
 			OR g.bedrag IN (27,30,38)
