@@ -4,8 +4,8 @@
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar (zoekterm TEXT, start_datum DATE);
 
-INSERT INTO _AV_myvar VALUES ('%C3221040-231333%',
-							  '2021-10-01'); --*/('R:6-%');
+INSERT INTO _AV_myvar VALUES ('%350/310%',
+							  '2022-10-01'); --*/('R:6-%');
 --INSERT INTO _AV_myvar VALUES ('R:2-82251007/012%');
 SELECT * FROM _AV_myvar;
 -----------------------------------------------------------
@@ -16,9 +16,9 @@ FROM _AV_myvar v, account_bank_statement abs LEFT OUTER JOIN account_bank_statem
 WHERE (LOWER(absl.name) LIKE LOWER(v.zoekterm) OR LOWER(p.name) LIKE LOWER(v.zoekterm)) AND absl.create_date::date >= v.start_datum /*AND abs.name LIKE '20-288-%'*/
 	 -- AND NOT(LOWER(absl.name) LIKE '%koalect%') AND abs.name LIKE '21-%'  -- voor "MANGOPAY" zonder toewijzing; met  v.zoekterm = '%mangopay%'
 --WHERE (LOWER(absl.name) LIKE '%expeditie%' OR LOWER(absl.name) LIKE '%exp.%' OR (LOWER(absl.name) LIKE '%exp%' AND NOT(LOWER(absl.name) LIKE '%koalect%'))) AND abs.name LIKE '%288%'
---AND absl.amount = 30 AND absl.date BETWEEN '2020-12-21' AND '2020-12-23' --
+--WHERE absl.amount = 38 AND absl.date BETWEEN '2024-04-30' AND '2024-05-15' --
 --WHERE absl.amount = 52000
-ORDER BY abs.create_date DESC
+--ORDER BY abs.create_date DESC
 
 
 
