@@ -3,17 +3,17 @@
 --------------------------------------------------------------------
 SELECT pp.name_template, * 
 SELECT i.partner_id, i.reference ogm, i.amount_total bedrag, i.state, i.create_date, i.internal_number, i.membership_renewal, i.number--, i.*
-SELECT COUNT(DISTINCT p.id) aantal, MAX(i.create_date) date
+--SELECT COUNT(DISTINCT p.id) aantal, MAX(i.create_date) date
 FROM	account_invoice i
 	--JOIN account_invoice_line il ON i.id = il.invoice_id
 	JOIN res_partner p ON i.partner_id = p.id
 	JOIN product_product pp ON p.membership_renewal_product_id = pp.id
 	JOIN res_users u ON i.create_uid = u.id
-WHERE 	i.create_date > '2023-10-20 05:00:00.00000' -- 9913
+WHERE 	i.create_date > '2024-10-10 08:31:00.00000' -- 9913
 	--i.create_date > '2017-11-10 08:00:00.00000' --i.create_date > '2017-11-09 10:49:36.222473' - 77301; i.create_date > '2017-11-09 07:42:19.440333' - 70154; '2017-11-08 07:56:55.00000' - 68802; '2017-11-07 09:58:38.00000' - 55562; '2017-11-07 08:27:13.00000' - 42334; '2017-11-06 09:55:47.00000' - 41872; '2017-11-04 10:19:30.00000' - 38423; 
 	AND i.membership_renewal --AND i.state = 'open'
-	AND i.number LIKE '%LID23%'
-	AND u.login = 'axel.vandencamp'
+	AND i.number LIKE '%LID24%'
+	--AND u.login = 'axel.vandencamp'
 ORDER BY i.create_date DESC -- ASC -- 
 
 ----------------------------------------------------------
