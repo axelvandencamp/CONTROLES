@@ -8,7 +8,7 @@ FROM res_partner p
 	JOIN account_invoice_line il ON il.id = aml.invoice_line_id
 	JOIN account_invoice i ON i.id = il.invoice_id
 	--JOIN res_partner p ON y.partner_id = p.id
-WHERE po.reference IN ('2024/06130')
+WHERE po.reference IN ('2024/06135')
 	AND i.state = 'paid'
 
 /*
