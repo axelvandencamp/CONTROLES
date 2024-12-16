@@ -34,6 +34,7 @@ ORDER BY y.partner_id
 --) z WHERE z.Aantal > 1
 --------------------------------------------------------
 -- status ophalen ahv ID's uit incasso opdrachten met factuur info
+-- - controle: reeds betaald
 --------------------------------------------------------
 --/*
 SELECT pl.partner_id, p.membership_state, i.number, aml.invoice_line_id, il.id, po.reference, i.amount_total, p.membership_end recentste_einddatum_lidmaatschap
