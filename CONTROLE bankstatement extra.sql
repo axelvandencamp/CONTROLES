@@ -4,8 +4,8 @@
 DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar (zoekterm TEXT, start_datum DATE);
 
-INSERT INTO _AV_myvar VALUES ('%veeakker%',
-							  '2022-10-01'); --*/('R:6-%');
+INSERT INTO _AV_myvar VALUES ('%ilge%',
+							  '2024-10-01'); --*/('R:6-%');
 --INSERT INTO _AV_myvar VALUES ('R:2-82251007/012%');
 SELECT * FROM _AV_myvar;
 -----------------------------------------------------------
