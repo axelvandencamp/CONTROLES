@@ -22,7 +22,7 @@ FROM account_coda_sdd_refused cr
 	JOIN account_journal aj ON aj.id = am.journal_id
 WHERE aj.name IN ('LID - Lidmaatschappen','Giften')
 	--AND bs.name = '19-288-342'
-	AND cr.create_date::date >= '2023-01-01'
+	AND cr.create_date::date >= '2025-01-01'
 GROUP BY cr.create_date::date, bs.name, aj.name	
 ORDER BY cr.create_date::date
 --------------------------------------
