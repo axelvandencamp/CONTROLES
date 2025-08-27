@@ -8,7 +8,9 @@ INTO TEMP TABLE av_myvar;
 SELECT * FROM av_myvar;
 --------------------------------------------------------
 SELECT p.id partner_id, p.membership_nbr lidnummer, 'prioriteit' prioriteit,
-	/*sq3.mei_id,*/ COALESCE(sq3.mcf_name,'') fase, COALESCE(sq3.mei_info,'') info, sq3.r aantal, sq3.mch_date datum,
+	/*sq3.mei_id,*/ COALESCE(sq3.mcf_name,'') fase, 
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(COALESCE(sq3.mei_info,''),chr(9),''),chr(10),''),chr(11),''),chr(12),''),chr(13),'') info, 
+	sq3.r aantal, sq3.mch_date datum,
 	p.name, p.membership_state lidmaatschap_status, sq3.sm2_last_debit_date, sq3.sm2_state mandaat_status,
     COALESCE(COALESCE(p.phone_work,p.phone),'') telefoonnr,
     COALESCE(p.mobile,'') gsm,
