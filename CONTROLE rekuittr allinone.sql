@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS _AV_myvar;
 CREATE TEMP TABLE _AV_myvar 
 	(uittreksel TEXT);
 
-INSERT INTO _AV_myvar VALUES('25-221-228');	--uittreksel
+INSERT INTO _AV_myvar VALUES('25-221-346');	--uittreksel
 				
 SELECT * FROM _AV_myvar;
 
@@ -148,6 +148,26 @@ INSERT INTO tempControleQRYs
 SELECT * FROM tempControleQRYs ORDER BY partnerid;
 --DELETE FROM tempControleQRYs;
 --SELECT DISTINCT partnerid FROM tempControleQRYs
+
+
+--/*
+--SELECT var.uittreksel, bs.name, bs.balance_start, bs.total_entry_encoding, bs.balance_end, balance_end_real, sum(bsl.amount) totaal_betaallijnen
+SELECT sum(bsl.amount) totaal_betaallijnen, count(bsl.amount) aantal, bsl.date
+--SELECT bsl.*
+FROM   _AV_myvar var, account_bank_statement bs
+	INNER JOIN account_bank_statement_line bsl ON bs.id = bsl.statement_id
+WHERE bs.name = var.uittreksel
+	AND bsl.date = '2025-12-15'
+	--AND bsl.amount = 0
+	AND LOWER(bsl.name) LIKE '%buckaroo%'
+--ORDER BY bsl.ref ASC	
+GROUP BY bsl.date var.uittreksel, bs.name, bs.balance_start, bs.total_entry_encoding, bs.balance_end, balance_end_real
+--*/
+/*
+SELECT var.uittreksel, bs.*
+FROM   _AV_myvar var, account_bank_statement bs
+WHERE bs.name = var.uittreksel
+*/
 
 /*
 SELECT * FROM account_move WHERE name = 'B-LID15-067193'
