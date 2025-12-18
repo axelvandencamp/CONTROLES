@@ -17,7 +17,7 @@ FROM
 		(
 		SELECT pl.id pl_id, *, ROW_NUMBER() OVER(PARTITION BY pl.partner_id ORDER BY pl.partner_id asc) AS Aantal
 		FROM payment_line pl JOIN payment_order po ON pl.order_id = po.id
-		WHERE po.reference IN ('2024/06333','2024/06334','2024/06335','2024/06336','2024/06337','2024/06338','2024/06339','2024/06341')
+		WHERE po.reference IN ('2025/06671','2025/06672','2025/06673','2025/06674','2025/06675','2025/06676','2025/06677')
 		) x
 	WHERE x.aantal > 1
 	) y
@@ -28,7 +28,7 @@ FROM
 	JOIN account_invoice_line ail ON ail.id = aml.invoice_line_id
 	JOIN account_invoice ai ON ai.id = ail.invoice_id
 	JOIN res_partner p ON y.partner_id = p.id
-WHERE po.reference IN ('2024/06333','2024/06334','2024/06335','2024/06336','2024/06337','2024/06338','2024/06339','2024/06341')
+WHERE po.reference IN ('2025/06671','2025/06672','2025/06673','2025/06674','2025/06675','2025/06676','2025/06677')
 	--AND y.partner_id IN (20869,16653,16901)
 ORDER BY y.partner_id
 --) z WHERE z.Aantal > 1
@@ -44,10 +44,10 @@ FROM 	res_partner p
 	JOIN account_move_line aml ON aml.id = pl.move_line_id
 	JOIN account_invoice_line il ON il.id = aml.invoice_line_id
 	JOIN account_invoice i ON i.id = il.invoice_id
-	JOIN (SELECT partner FROM membership_membership_line ml WHERE ml.state = 'paid' AND ml.date_to >= '2024-12-31') SQ1 ON SQ1.partner = p.id --voor controle december voor volgend jaar
-WHERE po.reference IN (/*'2024/06333','2024/06334','2024/06335','2024/06336','2024/06337','2024/06338','2024/06339',*/'2024/06341')
+	JOIN (SELECT partner FROM membership_membership_line ml WHERE ml.state = 'paid' AND ml.date_to >= '2025-12-31') SQ1 ON SQ1.partner = p.id --voor controle december voor volgend jaar
+WHERE po.reference IN ('2025/06671','2025/06672','2025/06673','2025/06674','2025/06675','2025/06676','2025/06677')
 	--AND p.membership_state = 'paid'  --voor controle tijdens het jaar
-	AND p.membership_end = '2025-12-31'
+	AND p.membership_end = '2026-12-31'
 	--AND NOT(amount_total IN (44,15,27, 10,11,37,38))
 --ORDER BY amount_total ASC	
 ORDER BY po.reference, i.number
@@ -69,10 +69,10 @@ FROM res_partner p
 	/*JOIN account_move_line aml ON aml.id = pl.move_line_id
 	JOIN account_invoice_line ail ON ail.id = aml.invoice_line_id
 	JOIN account_invoice ai ON ai.id = ail.invoice_id*/
-WHERE po.reference IN ('2024/06333','2024/06334','2024/06335','2024/06336','2024/06337','2024/06338','2024/06339')
+WHERE po.reference IN ('2025/06671','2025/06672','2025/06673','2025/06674','2025/06675','2025/06676','2025/06677')
 	--AND COALESCE(pb.bank_bic,'leeg') = 'leeg' -- = 'DUMMY'
 	--AND p.active = 't'
-	AND pl.partner_id IN (341986)
+	AND pl.partner_id IN (329795)
 ORDER BY po.reference	
 --*/
 
