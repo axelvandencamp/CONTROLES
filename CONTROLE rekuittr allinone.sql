@@ -164,9 +164,9 @@ WHERE bs.name = var.uittreksel
 GROUP BY bsl.date var.uittreksel, bs.name, bs.balance_start, bs.total_entry_encoding, bs.balance_end, balance_end_real
 --*/
 /*
-SELECT var.uittreksel, bs.*
+SELECT bs.name, bs.balance_start, bs.total_entry_encoding, bs.balance_end, bs.balance_end_real
 FROM   _AV_myvar var, account_bank_statement bs
-WHERE bs.name = var.uittreksel
+WHERE bs.name = '25-221-346'
 */
 
 /*
