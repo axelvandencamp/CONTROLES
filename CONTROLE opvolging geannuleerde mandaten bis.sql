@@ -3,7 +3,7 @@
 --------------------------------------------------------
 DROP TABLE IF EXISTS av_myvar;
 SELECT 
-	'2025-01-01'::date AS startdatum
+	'2026-01-01'::date AS startdatum
 INTO TEMP TABLE av_myvar;
 SELECT * FROM av_myvar;
 --------------------------------------------------------
